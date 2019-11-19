@@ -1,0 +1,6 @@
+/*
+http://dinosaur.compilertools.net/flex/manpage.html
+https://www.gnu.org/software/bison/manual/html_node/Token-Values.html
+https://www.revista-programar.info/artigos/flex-fast-lexical-analyser/
+http://alumni.cs.ucr.edu/~lgao/teaching/bison.html
+*/
