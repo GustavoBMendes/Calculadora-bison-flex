@@ -12,6 +12,9 @@
 struct symbol {		/* a variable name */
   char *name;
   double value;
+  int flag;
+  int i;
+  int f;
   struct ast *func;	/* stmt for the function */
   struct symlist *syms; /* list of dummy args */
 };
@@ -45,13 +48,6 @@ void symlistfree(struct symlist *sl);
  *  C user function call
  */ 
 
-enum bifs {			/* built-in functions */
-  B_sqrt = 1,
-  B_exp,
-  B_log,
-  B_print
-};
-
 /* nodes in the Abstract Syntax Tree */
 /* all have common initial nodetype */
 
@@ -59,30 +55,14 @@ struct ast {
   int nodetype;
   struct ast *l;
   struct ast *r;
-};
-
-struct fncall {			/* built-in function */
-  int nodetype;			/* type F */
-  struct ast *l;
-  enum bifs functype;
-};
-
-struct ufncall {		/* user function */
-  int nodetype;			/* type C */
-  struct ast *l;		/* list of arguments */
-  struct symbol *s;
-};
-
-struct flow {
-  int nodetype;			/* type I or W */
-  struct ast *cond;		/* condition */
-  struct ast *tl;		/* then or do list */
-  struct ast *el;		/* optional else list */
+  int i;
+  int f;
 };
 
 struct numval {
   int nodetype;			/* type K */
   double number;
+  int tipo;
 };
 
 struct symref {
@@ -94,20 +74,15 @@ struct symasgn {
   int nodetype;			/* type = */
   struct symbol *s;
   struct ast *v;		/* value */
+  int tipo;
 };
 
 /* build an AST */
 struct ast *newast(int nodetype, struct ast *l, struct ast *r);
-struct ast *newcmp(int cmptype, struct ast *l, struct ast *r);
-struct ast *newfunc(int functype, struct ast *l);
-struct ast *newcall(struct symbol *s, struct ast *l);
+struct ast *newcall(struct ast *l, struct ast *r);
 struct ast *newref(struct symbol *s);
-struct ast *newasgn(struct symbol *s, struct ast *v);
-struct ast *newnum(double d);
-struct ast *newflow(int nodetype, struct ast *cond, struct ast *tl, struct ast *tr);
-
-/* define a function */
-void dodef(struct symbol *name, struct symlist *syms, struct ast *stmts);
+struct ast *newasgn(struct symbol *s, struct ast *v, int tipo);
+struct ast *newnum(double d, int t);
 
 /* evaluate an AST */
 double eval(struct ast *);

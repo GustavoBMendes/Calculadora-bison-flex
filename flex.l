@@ -2,12 +2,13 @@
 %{
 
 	#include <stdio.h>
-	#define YY_DECL int yylex()
 	#include "bison.tab.h"
+	#include "func_bison.h"
+	
 %}
 
-digitos		([0-9])
-identif 	[a-z]
+digitos		([-+]?[0-9])
+identif 	[a-zA-Z][a-zA-Z0-9]*
 
 %%	
 
@@ -15,7 +16,7 @@ identif 	[a-z]
 				return PRINT;
 			}
 {identif}	{	
-				yylval.id = yytext[0];
+				yylval.s = lookup(yytext);
 				return ID;
 			}
 \n			{	
@@ -54,7 +55,8 @@ identif 	[a-z]
 			}
 {digitos}+"."{digitos}* {
 				yylval.fval = atof(yytext);
-				return FLOAT;
+				return REAL;
 			}
+
 
 %%
